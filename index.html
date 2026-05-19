@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>バスケ部スタッツ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-layout">
+
+  <!-- サイドバー -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <span class="sidebar-logo-icon">🏀</span>
+      <div class="sidebar-logo-text">バスケ部<br>スタッツ</div>
+    </div>
+    <button class="nav-item active" id="nav-home"     onclick="initHome()">          <span class="nav-item-icon">🏠</span> ホーム</button>
+    <button class="nav-item"        id="nav-members"  onclick="openMemberScreen()">  <span class="nav-item-icon">👥</span> メンバー管理</button>
+    <button class="nav-item"        id="nav-game"     onclick="openNewEventScreen()"><span class="nav-item-icon">▶</span>  試合を始める</button>
+    <button class="nav-item"        id="nav-history"  onclick="openHistoryScreen()"> <span class="nav-item-icon">📋</span> 試合の記録</button>
+    <button class="nav-item"        id="nav-ranking"  onclick="openRankingScreen()"> <span class="nav-item-icon">🏆</span> チーム順位</button>
+    <button class="nav-item"        id="nav-agg"      onclick="openAggScreen()">     <span class="nav-item-icon">📊</span> スタッツ集計</button>
+  </nav>
+
+  <!-- メインコンテンツ -->
+  <div class="main">
+
+    <!-- ホーム -->
+    <div id="screen-home" class="screen active">
+      <div class="page-header">
+        <div><h1>ホーム</h1><div class="page-header-sub">会社バスケ部 スタッツ記録アプリ</div></div>
+      </div>
+      <div class="content">
+        <div class="home-welcome">
+          <div class="home-welcome-icon">🏀</div>
+          <div>
+            <h2>バスケ部スタッツへようこそ</h2>
+            <p>試合ごとに得点・アシスト・リバウンドを記録できます。<br>まずはメンバーとチームを登録してから試合を始めましょう。</p>
+          </div>
+        </div>
+        <div class="home-cards">
+          <div class="home-card" onclick="openMemberScreen()">
+            <div class="home-card-icon">👥</div>
+            <div class="home-card-title">メンバー管理</div>
+            <div class="home-card-desc">メンバー・チームの登録と割り当て</div>
+          </div>
+          <div class="home-card" onclick="openNewEventScreen()">
+            <div class="home-card-icon">▶</div>
+            <div class="home-card-title">試合を始める</div>
+            <div class="home-card-desc">チームを選んで試合記録を開始</div>
+          </div>
+          <div class="home-card" onclick="openHistoryScreen()">
+            <div class="home-card-icon">📋</div>
+            <div class="home-card-title">試合の記録</div>
+            <div class="home-card-desc">過去の試合スタッツを確認</div>
+          </div>
+          <div class="home-card" onclick="openRankingScreen()">
+            <div class="home-card-icon">🏆</div>
+            <div class="home-card-title">チーム順位</div>
+            <div class="home-card-desc">勝敗・引き分けによる順位表</div>
+          </div>
+          <div class="home-card" onclick="openAggScreen()">
+            <div class="home-card-icon">📊</div>
+            <div class="home-card-title">スタッツ集計</div>
+            <div class="home-card-desc">複数試合のメンバー別集計</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- メンバー管理 -->
+    <div id="screen-members" class="screen">
+      <div class="page-header">
+        <div><h1>メンバー管理</h1><div class="page-header-sub">チームの作成とメンバーの割り当て</div></div>
+      </div>
+      <div class="content">
+        <div>
+          <div class="section-title" style="margin-bottom:12px;">チーム管理</div>
+          <div class="input-row" style="margin-bottom:10px;">
+            <input id="team-input" class="input-field" type="text" placeholder="チーム名（例：チームA）" maxlength="20" autocomplete="off">
+            <button class="btn btn-secondary" onclick="addTeam()">チーム追加</button>
+          </div>
+          <div id="team-list" class="team-list"></div>
+        </div>
+        <div>
+          <div class="section-title" style="margin-bottom:12px;">メンバー一覧</div>
+          <div class="input-row" style="margin-bottom:10px;">
+            <input id="member-input" class="input-field" type="text" placeholder="メンバー名（例：田中）" maxlength="20" autocomplete="off">
+            <button class="btn btn-primary" onclick="addMember()">追加</button>
+          </div>
+          <div id="member-list" class="member-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 試合作成 -->
+    <div id="screen-new-event" class="screen">
+      <div class="page-header">
+        <div><h1>試合を作成</h1><div class="page-header-sub">チームを選択して試合を開始</div></div>
+      </div>
+      <div class="content">
+        <div class="form-2col">
+          <div class="form-group">
+            <label class="form-label" for="event-name-input">試合名</label>
+            <input id="event-name-input" class="input-field" type="text" placeholder="例：第1回練習試合" maxlength="40" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="event-date-input">日付</label>
+            <input id="event-date-input" class="input-field" type="date">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">参加チームを選択</label>
+          <div id="team-check-list" class="team-check-list"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">参加メンバー（自動）</label>
+          <div id="member-preview" class="member-preview">
+            <span style="color:var(--text-muted);">チームを選択するとメンバーが表示されます</span>
+          </div>
+        </div>
+        <div><button class="btn btn-primary btn-lg" onclick="startGame()">▶ 試合開始</button></div>
+      </div>
+    </div>
+
+    <!-- 試合中 -->
+    <div id="screen-game" class="screen">
+      <div class="game-toolbar">
+        <div>
+          <div class="game-toolbar-title" id="game-name"></div>
+          <div class="game-toolbar-date" id="game-date"></div>
+        </div>
+        <button class="btn btn-danger" onclick="endGame()">■ 試合を終了</button>
+      </div>
+      <div id="scoreboard-area"></div>
+      <div id="game-content" style="overflow-y:auto;flex:1;padding-top:16px;"></div>
+    </div>
+
+    <!-- 試合の記録 -->
+    <div id="screen-history" class="screen">
+      <div class="page-header">
+        <div><h1>試合の記録</h1><div class="page-header-sub">過去の試合一覧</div></div>
+      </div>
+      <div class="content">
+        <div id="event-list" class="event-list"></div>
+      </div>
+    </div>
+
+    <!-- 試合詳細 -->
+    <div id="screen-detail" class="screen">
+      <div class="page-header">
+        <div><h1 id="detail-name"></h1><div class="page-header-sub" id="detail-date"></div></div>
+        <div style="display:flex;gap:10px;">
+          <div id="resume-btn-placeholder"></div>
+          <button class="btn btn-ghost" onclick="deleteEvent()">削除</button>
+        </div>
+      </div>
+      <div class="content">
+        <div id="detail-scoreboard"></div>
+        <div class="stats-table">
+          <div class="stats-table-header">
+            <div>選手</div>
+            <div style="text-align:center">得点</div>
+            <div style="text-align:center">アシスト</div>
+            <div style="text-align:center">リバウンド</div>
+          </div>
+          <div id="detail-stats"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- チーム順位 -->
+    <div id="screen-ranking" class="screen">
+      <div class="page-header">
+        <div><h1>チーム順位</h1><div class="page-header-sub">勝敗・引き分けによる順位（勝=3点 / 引=1点 / 負=0点）</div></div>
+        <button class="btn btn-secondary" onclick="openRankingScreen()">🔄 更新</button>
+      </div>
+      <div class="content">
+        <div id="ranking-table-area"></div>
+        <div id="ranking-match-list"></div>
+      </div>
+    </div>
+
+    <!-- スタッツ集計 -->
+    <div id="screen-agg" class="screen">
+      <div class="page-header">
+        <div><h1>スタッツ集計</h1><div class="page-header-sub">複数の試合を選択してメンバー別に集計</div></div>
+        <button class="btn btn-primary" onclick="calcAgg()">📊 集計する</button>
+      </div>
+      <div class="agg-layout">
+        <div class="agg-panel agg-panel-left">
+          <div class="section-title" style="margin-bottom:12px;">試合を選択</div>
+          <div id="agg-event-list" class="agg-event-check-list"></div>
+        </div>
+        <div class="agg-panel">
+          <div id="agg-result">
+            <div class="agg-placeholder">
+              <div class="agg-placeholder-icon">📊</div>
+              <div>左の一覧から試合を選択して<br>「集計する」ボタンを押してください</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ダイアログ -->
+<div id="dialog" class="dialog-overlay hidden">
+  <div class="dialog">
+    <h3 id="dialog-title"></h3>
+    <p id="dialog-message"></p>
+    <div class="dialog-buttons">
+      <button class="btn btn-secondary" onclick="closeDialog(false)">キャンセル</button>
+      <button class="btn btn-primary"   onclick="closeDialog(true)">OK</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
